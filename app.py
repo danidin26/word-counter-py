@@ -44,17 +44,16 @@ def _process_input(input_type, data):
 @app.route("/count/<string:input_type>", methods=["POST"])
 def count(input_type):
     if input_type not in _INPUT_TYPES:
-        return make_response(
-            'Invalid input type "{input_type}", available input types: {}'.format(', '.join(_INPUT_TYPES)), '400')
+        return make_response(f"Invalid input type {input_type}, available input types: {_INPUT_TYPES}", 400)
     data = request.data
     if not data:
-        return make_response('Request body must contain text / URL / local path to work on', '400')
+        return make_response("Request body must contain text / URL / local path to work on", 400)
 
     decoded = data.decode('utf-8')
     try:
         _validate(input_type, decoded)
         _process_input(input_type, decoded)
-        return make_response("OK", '202')
+        return make_response("OK", 202)
     except RuntimeError as err:
         return make_response(str(err), 400)
     except FileNotFoundError:
