@@ -52,7 +52,7 @@ response.iter_content(chunk_size=_READ_CHUNK_SIZE, decode_unicode=True)
 
 To avoid loss of data, the buffer is being splitted by the index of the last whitespace and the rest is being concated to the next buffer.
 
-The buffer than being tokenized, cleaned, summed in a `Collections.Counter` object and updated to the `statistics.json` file.
+The buffer then being tokenized, cleaned, summed in a `Collections.Counter` object and updated to the `statistics.json` file.
 
  
 ## How to run   
