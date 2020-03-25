@@ -9,10 +9,19 @@ This assigment was written using Python 3.7.3 and Flask 1.1.1
    input type can be one of:
    - 'url' - request body to include the desired url
    - 'local' - request body to include the absolute path to a ".txt" file
-   - 'text' - request body is the text to process
+   - 'text' - request body is the text to process.
+      e.g.:
+       ```
+      curl --location --request POST 'http://127.0.0.1:5000/count/text' \
+      --header 'Content-Type: text/plain' \
+      --data-raw 'Lorem ipsum dolor sit amet........
+      ```
 
 2. GET request to retrieve word occurences:
    http://127.0.0.1:5000/statistics/<query_word>
+   
+   e.g.:
+   ```curl --location --request GET 'http://127.0.0.1:5000/statistics/corona'```
    
 The text processed by the app is being tokenized based on spaces.
 each token is stripped from all non alpha characters
