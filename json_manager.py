@@ -1,5 +1,6 @@
 import json
 from collections import Counter
+from json import JSONDecodeError
 from os import path
 
 
@@ -18,12 +19,16 @@ class JSONManager:
         data = None
         try:
             with open(self._filename, "r") as read_file:
-                data = json.load(read_file)
+                try:
+                    data = json.load(read_file)
+                except JSONDecodeError:
+                    pass
+                    # file is empty or corrupted
 
             aggregated_counter = Counter(data)
             aggregated_counter.update(counter)
-        except (ValueError, IOError):
-            raise RuntimeError("Error Updating results to Stats File")
+        except (ValueError, IOError) as err:
+            raise RuntimeError(f"Error Updating results to Stats File: {str(err)}")
 
         with open(self._filename, "w+") as write_file:
             json.dump(aggregated_counter, write_file)
@@ -35,5 +40,5 @@ class JSONManager:
 
             result = 0 if word not in data else data[word]
             return result
-        except (ValueError, IOError):
+        except (ValueError, IOError) as err:
             raise RuntimeError("Error Reading Stats File")

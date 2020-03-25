@@ -1,7 +1,7 @@
 from flask import Flask, make_response, request
 import urllib
 import os
-from word_counter import processor_service as processor
+import processor_service as processor
 
 app = Flask(__name__)
 
@@ -53,10 +53,10 @@ def count(input_type):
     decoded = data.decode('utf-8')
     try:
         _validate(input_type, decoded)
-        _process_input(input_type, data)
+        _process_input(input_type, decoded)
         return make_response("OK", '202')
     except RuntimeError as err:
-        return make_response(err, 400)
+        return make_response(str(err), 400)
     except FileNotFoundError:
         return make_response("input file does not exist", 400)
     except urllib.error.URLError:
@@ -65,8 +65,11 @@ def count(input_type):
 
 @app.route("/statistics/<string:input_word>", methods=["GET"])
 def stats(input_word):
-    occurrences = processor.process_stats_for_word(input_word)
-    return str(occurrences)
+    try:
+        occurrences = processor.process_stats_for_word(input_word)
+        return str(occurrences)
+    except RuntimeError as err:
+        return make_response(str(err), 400)
 
 
 if __name__ == '__main__':

@@ -1,9 +1,9 @@
 import re
 from collections import Counter
-from word_counter import json_manager
+import json_manager
 import requests as request
 
-_PERSISTENT_DATA_FILE_PATH = "../statistics.json"
+_PERSISTENT_DATA_FILE_PATH = "statistics.json"
 
 _READ_CHUNK_SIZE = 1 * 1024 * 1024
 _REGEX_WORD_SEPARATOR = re.compile(r'\S+')
