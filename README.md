@@ -19,7 +19,33 @@ each token is stripped from all non alpha characters
 e.g.: 
    - me2, m2e, 2me -> me
 
-   
+#### How it works
+When a request for process is made, based on the input type, the relevant flow will trigger.
+
+In order to deal with potentially big input the data from files and url is being read by chunks.
+
+For a txt file:
+
+```buf = file.read(_READ_CHUNK_SIZE) ```
+
+To avoid loss of data, the file is being read until the first whitespace:
+
+```
+while not buf[-1].isspace():
+ch = file.read(1)
+```
+
+For url:
+
+```
+response.iter_content(chunk_size=_READ_CHUNK_SIZE, decode_unicode=True)
+```
+
+To avoid loss of data, the buffer is being splitted by the index of the last whitespace and the rest is being concated to the next buffer.
+
+The buffer than being tokenized, cleaned, summed in a `Collections.Counter` object and updated to the `statistics.json` file.
+
+ 
 ## How to run   
 ### Install
 
@@ -37,9 +63,9 @@ Start the app by running:
 
 
 ## Project Assumptions
- - processed text - space delimmeted text (new lines and tabs are optional)
+ - Processed text - space delimmeted text (new lines and tabs are optional)
  - The main challange of the app is to deal with very large input
- - url input - valid url format
- - local file - absolute path to a local txt file
- - after clarification - requests are being processed **synchronously**
+ - URL input - valid url format
+ - Local file - absolute path to a local txt file
+ - After clarification - requests are being processed **synchronously** - no support for concurrent requests and file locking.
 
