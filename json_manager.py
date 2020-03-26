@@ -40,5 +40,9 @@ class JSONManager:
 
             result = 0 if word not in data else data[word]
             return result
-        except (ValueError, IOError) as err:
+
+        except JSONDecodeError:
+            raise RuntimeError("Stats File empty")
+
+        except (ValueError, IOError):
             raise RuntimeError("Error Reading Stats File")
